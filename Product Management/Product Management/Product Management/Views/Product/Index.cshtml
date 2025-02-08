@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Product>
+
+@{
+    ViewData["Title"] = "Product List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Product List</h2>
+
+<a asp-action="Create" class="btn btn-success">Add New Product</a>
+
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Product ID</th>
+            <th>Product Name</th>
+            <th>Category Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.ProductId</td>
+                <td>@product.ProductName</td>
+                <td>@product.CategoryName</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@product.ProductId" class="btn btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@product.ProductId" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<nav>
+    <ul class="pagination">
+        <li class="page-item @(ViewBag.CurrentPage <= 1 ? "disabled" : "")">
+            <a class="page-link" href="@Url.Action("Index", new { pageNumber = ViewBag.CurrentPage - 1, pageSize = 10 })">Previous</a>
+        </li>
+
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                <a class="page-link" href="@Url.Action("Index", new { pageNumber = i, pageSize = 10 })">@i</a>
+            </li>
+        }
+
+        <li class="page-item @(ViewBag.CurrentPage >= ViewBag.TotalPages ? "disabled" : "")">
+            <a class="page-link" href="@Url.Action("Index", new { pageNumber = ViewBag.CurrentPage + 1, pageSize = 10 })">Next</a>
+        </li>
+    </ul>
+</nav>
